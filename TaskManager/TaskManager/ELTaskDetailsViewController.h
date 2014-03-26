@@ -10,7 +10,11 @@
 #import <UIKit/UIKit.h>
 
 
+@class ELTask;
+
+
 @interface ELTaskDetailsViewController : UIViewController
 
+@property (strong, nonatomic) ELTask *task;
 
 @end

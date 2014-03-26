@@ -25,6 +25,7 @@
 		3754DBFA18E203FB0096CC0D /* ELTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBF918E203FB0096CC0D /* ELTask.m */; };
 		3754DBFD18E2060A0096CC0D /* ELTaskDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFC18E2060A0096CC0D /* ELTaskDetailsViewController.m */; };
 		3754DC0018E2063C0096CC0D /* ELTaskImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFF18E2063C0096CC0D /* ELTaskImageViewController.m */; };
+		3754DC0618E32C6A0096CC0D /* ELNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DC0518E32C6A0096CC0D /* ELNavigationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		3754DBFC18E2060A0096CC0D /* ELTaskDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskDetailsViewController.m; sourceTree = "<group>"; };
 		3754DBFE18E2063C0096CC0D /* ELTaskImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskImageViewController.h; sourceTree = "<group>"; };
 		3754DBFF18E2063C0096CC0D /* ELTaskImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskImageViewController.m; sourceTree = "<group>"; };
+		3754DC0418E32C6A0096CC0D /* ELNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELNavigationController.h; sourceTree = "<group>"; };
+		3754DC0518E32C6A0096CC0D /* ELNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELNavigationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +167,8 @@
 		3754DBF118E202F70096CC0D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3754DC0418E32C6A0096CC0D /* ELNavigationController.h */,
+				3754DC0518E32C6A0096CC0D /* ELNavigationController.m */,
 				3754DBFB18E2060A0096CC0D /* ELTaskDetailsViewController.h */,
 				3754DBFC18E2060A0096CC0D /* ELTaskDetailsViewController.m */,
 				3754DBF418E203C50096CC0D /* ELTaskEditionViewController.h */,
@@ -302,6 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3754DC0618E32C6A0096CC0D /* ELNavigationController.m in Sources */,
 				3754DBD318E202EE0096CC0D /* ELTaskListViewController.m in Sources */,
 				3754DBC918E202EE0096CC0D /* main.m in Sources */,
 				3754DBFA18E203FB0096CC0D /* ELTask.m in Sources */,

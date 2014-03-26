@@ -8,6 +8,8 @@
 
 
 #import "ELTask.h"
+#import "ELTaskDetailsViewController.h"
+#import "ELTaskEditionViewController.h"
 #import "ELTaskListViewController.h"
 
 
@@ -65,13 +67,42 @@
     ELTask *task = self.tasks[indexPath.row];
     
     cell.textLabel.text = task.name;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", task.date];
+    cell.imageView.image = [UIImage imageNamed:task.imageName];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:@"taskDetails" sender:nil];
+    ELTask *task = self.tasks[indexPath.row];
+    [self performSegueWithIdentifier:@"taskDetails" sender:task];
+}
+
+
+#pragma mark - Rtation
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft;
+}
+
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"taskDetails"]) {
+        ELTaskDetailsViewController *target = segue.destinationViewController;
+        target.task = sender;
+    } else if ([segue.identifier isEqualToString:@"taskEdition"]) {
+        
+    }
 }
 
 @end
