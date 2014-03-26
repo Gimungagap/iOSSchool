@@ -26,6 +26,8 @@
 		3754DBFD18E2060A0096CC0D /* ELTaskDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFC18E2060A0096CC0D /* ELTaskDetailsViewController.m */; };
 		3754DC0018E2063C0096CC0D /* ELTaskImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFF18E2063C0096CC0D /* ELTaskImageViewController.m */; };
 		3754DC0618E32C6A0096CC0D /* ELNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DC0518E32C6A0096CC0D /* ELNavigationController.m */; };
+		379CF06218E338F800319D9A /* ELTaskEditionTextInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF06118E338F800319D9A /* ELTaskEditionTextInputCell.m */; };
+		379CF06518E3391200319D9A /* ELTaskEditionDateInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +70,10 @@
 		3754DBFF18E2063C0096CC0D /* ELTaskImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskImageViewController.m; sourceTree = "<group>"; };
 		3754DC0418E32C6A0096CC0D /* ELNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELNavigationController.h; sourceTree = "<group>"; };
 		3754DC0518E32C6A0096CC0D /* ELNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELNavigationController.m; sourceTree = "<group>"; };
+		379CF06018E338F800319D9A /* ELTaskEditionTextInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskEditionTextInputCell.h; sourceTree = "<group>"; };
+		379CF06118E338F800319D9A /* ELTaskEditionTextInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskEditionTextInputCell.m; sourceTree = "<group>"; };
+		379CF06318E3391200319D9A /* ELTaskEditionDateInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskEditionDateInputCell.h; sourceTree = "<group>"; };
+		379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskEditionDateInputCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +202,10 @@
 		3754DBF318E203640096CC0D /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				379CF06318E3391200319D9A /* ELTaskEditionDateInputCell.h */,
+				379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */,
+				379CF06018E338F800319D9A /* ELTaskEditionTextInputCell.h */,
+				379CF06118E338F800319D9A /* ELTaskEditionTextInputCell.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -308,11 +318,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3754DC0618E32C6A0096CC0D /* ELNavigationController.m in Sources */,
+				379CF06218E338F800319D9A /* ELTaskEditionTextInputCell.m in Sources */,
 				3754DBD318E202EE0096CC0D /* ELTaskListViewController.m in Sources */,
 				3754DBC918E202EE0096CC0D /* main.m in Sources */,
 				3754DBFA18E203FB0096CC0D /* ELTask.m in Sources */,
 				3754DC0018E2063C0096CC0D /* ELTaskImageViewController.m in Sources */,
 				3754DBCD18E202EE0096CC0D /* ELAppDelegate.m in Sources */,
+				379CF06518E3391200319D9A /* ELTaskEditionDateInputCell.m in Sources */,
 				3754DBF618E203C50096CC0D /* ELTaskEditionViewController.m in Sources */,
 				3754DBFD18E2060A0096CC0D /* ELTaskDetailsViewController.m in Sources */,
 			);

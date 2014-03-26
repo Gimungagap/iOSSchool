@@ -13,7 +13,12 @@
 #import "ELTaskListViewController.h"
 
 
-@interface ELTaskListViewController () <UITableViewDelegate,UITableViewDataSource>
+@interface ELTaskListViewController ()
+<
+UITableViewDelegate,
+UITableViewDataSource,
+ELTaskEditionViewControllerDelegate
+>
 
 @property (strong, nonatomic) NSArray *tasks;
 
@@ -101,8 +106,21 @@
         ELTaskDetailsViewController *target = segue.destinationViewController;
         target.task = sender;
     } else if ([segue.identifier isEqualToString:@"taskEdition"]) {
-        
+        UINavigationController *destination = segue.destinationViewController;
+        ELTaskEditionViewController *editionVC =
+                                    (id)destination.topViewController;
+        editionVC.delegate = self;
     }
+}
+
+
+#pragma mark - Edition
+
+- (void)taskEditionviewController:(ELTaskEditionViewController *)taskEditionViewController didCreateTask:(ELTask *)task
+{
+    self.tasks = [self.tasks arrayByAddingObject:task];
+    [self.tableView reloadData];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

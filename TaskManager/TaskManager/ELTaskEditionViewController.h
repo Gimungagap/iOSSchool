@@ -10,7 +10,20 @@
 #import <UIKit/UIKit.h>
 
 
+@class ELTask;
+@class ELTaskEditionViewController;
+
+
+@protocol ELTaskEditionViewControllerDelegate <NSObject>
+
+@required
+- (void)taskEditionviewController:(ELTaskEditionViewController*)taskEditionViewController didCreateTask:(ELTask*)task;
+
+@end
+
+
 @interface ELTaskEditionViewController : UITableViewController
 
+@property (weak, nonatomic) IBOutlet id<ELTaskEditionViewControllerDelegate> delegate;
 
 @end

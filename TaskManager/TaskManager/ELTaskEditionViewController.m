@@ -7,11 +7,28 @@
 //
 
 
+#import "ELTask.h"
+#import "ELTaskEditionTextInputCell.h"
+#import "ELTaskEditionDateInputCell.h"
 #import "ELTaskEditionViewController.h"
 
 
-@interface ELTaskEditionViewController ()
+typedef NS_ENUM(NSUInteger, ELTaskEditionTableRow)
+{
+    ELTaskEditionTableRowName = 0,
+    ELTaskEditionTableRowDescription,
+    ELTaskEditionTableRowDate,
+    ELTaskEditionTableRowCount
+};
 
+
+@interface ELTaskEditionViewController ()
+<
+ELTaskEditionDateInputCellDelegate,
+ELTaskEditionTextInputCellDelegate
+>
+
+@property (strong, nonatomic) ELTask *task;
 
 @end
 
@@ -25,31 +42,96 @@
 {
     [super viewDidLoad];
 
+    if (!self.task) {
+        self.task = [ELTask new];
+    }
+}
 
+
+#pragma mark - UI Events
+
+- (IBAction)onDoneButtonPressed:(id)sender
+{
+    [self.delegate taskEditionviewController:self
+                               didCreateTask:self.task];
 }
 
 
 #pragma mark - Table View
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 0;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return ELTaskEditionTableRowCount;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"identifier" forIndexPath:indexPath];
-    return cell;
+    switch (indexPath.row)
+    {
+        case ELTaskEditionTableRowName:
+        {
+            ELTaskEditionTextInputCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:@"textInputCell"
+                                            forIndexPath:indexPath];
+            
+            cell.fieldName = @"Название";
+            cell.text = self.task.name;
+            cell.delegate = self;
+            
+            return cell;
+            break;
+        }
+        case ELTaskEditionTableRowDescription:
+        {
+            ELTaskEditionTextInputCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:@"textInputCell"
+                                            forIndexPath:indexPath];
+            
+            cell.fieldName = @"Описание";
+            cell.text = self.task.taskDescription;
+            cell.delegate = self;
+            
+            return cell;
+            break;
+        }
+        case ELTaskEditionTableRowDate:
+        {
+            ELTaskEditionDateInputCell *cell =
+            [tableView dequeueReusableCellWithIdentifier:@"dateInputCell"
+                                            forIndexPath:indexPath];
+            
+            cell.fieldName = @"Дата";
+            cell.date = self.task.date;
+            cell.delegate = self;
+            
+            return cell;
+            break;
+        }
+        default:
+        {
+            return nil;
+            break;
+        }
+    }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+
+#pragma mark - Delegates
+
+- (void)textInputCellDidReceiveText:(ELTaskEditionTextInputCell *)cell
 {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
+    if (indexPath.row == ELTaskEditionTableRowName) {
+        self.task.name = cell.text;
+    } else if (indexPath.row == ELTaskEditionTableRowDescription) {
+        self.task.taskDescription = cell.text;
+    }
+}
+
+- (void)dateInputCellDidReceiveDate:(ELTaskEditionDateInputCell *)cell
+{
+    self.task.date = cell.date;
 }
 
 @end
