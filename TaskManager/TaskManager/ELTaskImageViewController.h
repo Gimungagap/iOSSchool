@@ -12,5 +12,6 @@
 
 @interface ELTaskImageViewController : UIViewController
 
+@property (nonatomic, copy) NSString *imageName;
 
 @end

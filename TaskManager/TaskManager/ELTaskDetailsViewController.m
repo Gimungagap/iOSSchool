@@ -8,6 +8,7 @@
 
 
 #import "ELTask.h"
+#import "ELTaskImageViewController.h"
 #import "ELTaskDetailsViewController.h"
 
 
@@ -36,6 +37,24 @@
     self.taskDescriptionLabel.text = self.task.taskDescription;
 }
 
+
+#pragma mark - Touches
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self performSegueWithIdentifier:@"photo" sender:nil];
+}
+
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"photo"]) {
+        ELTaskImageViewController *dest = (id)segue.destinationViewController;
+        dest.imageName = self.task.imageName;
+    }
+}
 
 //- (void)viewDidLayoutSubviews
 //{

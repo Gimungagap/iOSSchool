@@ -7,10 +7,19 @@
 //
 
 
+#import "ELCrossableLabel.h"
 #import "ELTask.h"
 #import "ELTaskDetailsViewController.h"
 #import "ELTaskEditionViewController.h"
 #import "ELTaskListViewController.h"
+
+
+typedef NS_ENUM(NSUInteger, ELTaskListSection)
+{
+    ELTaskListSectionToDo = 0,
+    ELTaskListSectionDone,
+    ELTaskListSectionCount
+};
 
 
 @interface ELTaskListViewController ()
@@ -20,7 +29,8 @@ UITableViewDataSource,
 ELTaskEditionViewControllerDelegate
 >
 
-@property (strong, nonatomic) NSArray *tasks;
+@property (strong, nonatomic) NSMutableArray *tasksToDo;
+@property (strong, nonatomic) NSMutableArray *tasksDone;
 
 @end
 
@@ -36,6 +46,24 @@ ELTaskEditionViewControllerDelegate
 
     [self generateData];
 }
+
+
+#pragma mark - UI Events
+
+- (IBAction)onTableSwiped:(UISwipeGestureRecognizer*)sender
+{
+    CGPoint location = [sender locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
+    
+    if (sender.direction == UISwipeGestureRecognizerDirectionLeft &&
+        indexPath.section == ELTaskListSectionDone) {
+        [self toggleStateForIndexPath:indexPath];
+    } else if (sender.direction == UISwipeGestureRecognizerDirectionRight &&
+               indexPath.section == ELTaskListSectionToDo) {
+        [self toggleStateForIndexPath:indexPath];
+    }
+}
+
 
 
 #pragma mark - Logics
@@ -54,38 +82,102 @@ ELTaskEditionViewControllerDelegate
     task2.taskDescription = @"Comment2";
     task2.imageName = @"av2";
     
-    self.tasks = @[task1, task2];
+//    self.tasksToDo = [@[task1, task2] mutableCopy];
+//    self.tasksDone = [NSMutableArray array];
+    self.tasksDone = [@[task1, task2] mutableCopy];
+    self.tasksToDo = [NSMutableArray array];
+    
 }
 
 
 #pragma mark - Table View
 
+- (ELTask*)taskAtIndexPath:(NSIndexPath*)indexPath
+{
+    if (indexPath.section == ELTaskListSectionToDo) {
+        return self.tasksToDo[indexPath.row];
+    } else if (indexPath.section == ELTaskListSectionDone) {
+        return self.tasksDone[indexPath.row];
+    } else {
+        return nil;
+    }
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return ELTaskListSectionCount;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.tasks count];
+    if (section == ELTaskListSectionToDo) {
+        return [self.tasksToDo count];
+    } else if (section == ELTaskListSectionDone) {
+        return [self.tasksDone count];
+    } else {
+        return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"taskCell"];
     
-    ELTask *task = self.tasks[indexPath.row];
+    ELTask *task = [self taskAtIndexPath:indexPath];
+
+    ELCrossableLabel *label = (id)[cell viewWithTag:17];
+    label.crossed = indexPath.section == ELTaskListSectionDone;
+    label.text = task.name;
     
-    cell.textLabel.text = task.name;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", task.date];
-    cell.imageView.image = [UIImage imageNamed:task.imageName];
+//    cell.textLabel.text = task.name;
+//    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", task.date];
+//    cell.imageView.image = [UIImage imageNamed:task.imageName];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ELTask *task = self.tasks[indexPath.row];
+    ELTask *task = [self taskAtIndexPath:indexPath];
     [self performSegueWithIdentifier:@"taskDetails" sender:task];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == ELTaskListSectionToDo) {
+        return @"ToDo";
+    } else if (section == ELTaskListSectionDone) {
+        return @"Done";
+    } else {
+        return nil;
+    }
+}
 
-#pragma mark - Rtation
+- (void)toggleStateForIndexPath:(NSIndexPath*)indexPath
+{
+    ELTask *task = [self taskAtIndexPath:indexPath];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    ELCrossableLabel *label = (id)[cell viewWithTag:17];
+    
+    [self.tableView beginUpdates];
+    
+    if (indexPath.section == ELTaskListSectionToDo) {
+        [self.tasksToDo removeObject:task];
+        [self.tasksDone addObject:task];
+        [self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:ELTaskListSectionDone]];
+        label.crossed = YES;
+    } else if (indexPath.section == ELTaskListSectionDone) {
+        [self.tasksDone removeObject:task];
+        [self.tasksToDo addObject:task];
+        [self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:ELTaskListSectionToDo]];
+        label.crossed = NO;
+    }
+    
+    [self.tableView endUpdates];
+}
+
+
+#pragma mark - Rotation
 
 - (BOOL)shouldAutorotate
 {
@@ -118,7 +210,7 @@ ELTaskEditionViewControllerDelegate
 
 - (void)taskEditionviewController:(ELTaskEditionViewController *)taskEditionViewController didCreateTask:(ELTask *)task
 {
-    self.tasks = [self.tasks arrayByAddingObject:task];
+    [self.tasksToDo addObject:task];
     [self.tableView reloadData];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

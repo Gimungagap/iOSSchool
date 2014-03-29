@@ -26,8 +26,11 @@
 		3754DBFD18E2060A0096CC0D /* ELTaskDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFC18E2060A0096CC0D /* ELTaskDetailsViewController.m */; };
 		3754DC0018E2063C0096CC0D /* ELTaskImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFF18E2063C0096CC0D /* ELTaskImageViewController.m */; };
 		3754DC0618E32C6A0096CC0D /* ELNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DC0518E32C6A0096CC0D /* ELNavigationController.m */; };
+		3788A7A218E6DDC2003ACC0D /* ELGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3788A7A118E6DDC2003ACC0D /* ELGradientView.m */; };
+		3788A7A418E6DDD6003ACC0D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3788A7A318E6DDD6003ACC0D /* QuartzCore.framework */; };
 		379CF06218E338F800319D9A /* ELTaskEditionTextInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF06118E338F800319D9A /* ELTaskEditionTextInputCell.m */; };
 		379CF06518E3391200319D9A /* ELTaskEditionDateInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */; };
+		379CF07318E6D76300319D9A /* ELCrossableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF07218E6D76300319D9A /* ELCrossableLabel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,10 +73,15 @@
 		3754DBFF18E2063C0096CC0D /* ELTaskImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskImageViewController.m; sourceTree = "<group>"; };
 		3754DC0418E32C6A0096CC0D /* ELNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELNavigationController.h; sourceTree = "<group>"; };
 		3754DC0518E32C6A0096CC0D /* ELNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELNavigationController.m; sourceTree = "<group>"; };
+		3788A7A018E6DDC2003ACC0D /* ELGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELGradientView.h; sourceTree = "<group>"; };
+		3788A7A118E6DDC2003ACC0D /* ELGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELGradientView.m; sourceTree = "<group>"; };
+		3788A7A318E6DDD6003ACC0D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		379CF06018E338F800319D9A /* ELTaskEditionTextInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskEditionTextInputCell.h; sourceTree = "<group>"; };
 		379CF06118E338F800319D9A /* ELTaskEditionTextInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskEditionTextInputCell.m; sourceTree = "<group>"; };
 		379CF06318E3391200319D9A /* ELTaskEditionDateInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskEditionDateInputCell.h; sourceTree = "<group>"; };
 		379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskEditionDateInputCell.m; sourceTree = "<group>"; };
+		379CF07118E6D76300319D9A /* ELCrossableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCrossableLabel.h; sourceTree = "<group>"; };
+		379CF07218E6D76300319D9A /* ELCrossableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCrossableLabel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3788A7A418E6DDD6003ACC0D /* QuartzCore.framework in Frameworks */,
 				3754DBBF18E202EE0096CC0D /* CoreGraphics.framework in Frameworks */,
 				3754DBC118E202EE0096CC0D /* UIKit.framework in Frameworks */,
 				3754DBBD18E202EE0096CC0D /* Foundation.framework in Frameworks */,
@@ -122,6 +131,7 @@
 		3754DBBB18E202EE0096CC0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3788A7A318E6DDD6003ACC0D /* QuartzCore.framework */,
 				3754DBBC18E202EE0096CC0D /* Foundation.framework */,
 				3754DBBE18E202EE0096CC0D /* CoreGraphics.framework */,
 				3754DBC018E202EE0096CC0D /* UIKit.framework */,
@@ -206,6 +216,10 @@
 				379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */,
 				379CF06018E338F800319D9A /* ELTaskEditionTextInputCell.h */,
 				379CF06118E338F800319D9A /* ELTaskEditionTextInputCell.m */,
+				379CF07118E6D76300319D9A /* ELCrossableLabel.h */,
+				379CF07218E6D76300319D9A /* ELCrossableLabel.m */,
+				3788A7A018E6DDC2003ACC0D /* ELGradientView.h */,
+				3788A7A118E6DDC2003ACC0D /* ELGradientView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -326,7 +340,9 @@
 				3754DBCD18E202EE0096CC0D /* ELAppDelegate.m in Sources */,
 				379CF06518E3391200319D9A /* ELTaskEditionDateInputCell.m in Sources */,
 				3754DBF618E203C50096CC0D /* ELTaskEditionViewController.m in Sources */,
+				3788A7A218E6DDC2003ACC0D /* ELGradientView.m in Sources */,
 				3754DBFD18E2060A0096CC0D /* ELTaskDetailsViewController.m in Sources */,
+				379CF07318E6D76300319D9A /* ELCrossableLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
