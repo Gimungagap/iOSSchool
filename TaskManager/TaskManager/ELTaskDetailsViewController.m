@@ -30,10 +30,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    static NSDateFormatter *dateFormatter;
+    if (!dateFormatter) {
+        dateFormatter = [NSDateFormatter new];
+    }
 
     self.taskImageView.image = [UIImage imageNamed:self.task.imageName];
     self.taskNameLabel.text = self.task.name;
-    self.taskDateLabel.text = self.task.date.description;
+    
+//    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ru_RU"];
+    [dateFormatter setLocale:locale];
+    
+    NSString *dateString = [dateFormatter stringFromDate:self.task.date];
+    
+    NSDate *date = [dateFormatter dateFromString:dateString];
+    NSLog(@"date: %@", date);
+    
+    self.taskDateLabel.text = dateString;
     self.taskDescriptionLabel.text = self.task.taskDescription;
 }
 
