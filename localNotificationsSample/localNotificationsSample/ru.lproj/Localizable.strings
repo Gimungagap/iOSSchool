@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  localNotificationsSample
+
+  Created by Alexey Storozhev on 29.03.14.
+  Copyright (c) 2014 e-legion. All rights reserved.
+*/
+
+"LocalizedText1" = "Текст 1";
+"LocalizedText2" = "Текст 2";
+"Cancel" = "Отмена";
+
+"AlertBody" = "Тело сообщения";
+"Message" = "%d сообщений";

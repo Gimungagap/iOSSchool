@@ -1,0 +1,1 @@
+../../YGeocoder/ygeocoder/YGeocoder/YGGeoObjectMetaData.h

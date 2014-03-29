@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  localNotificationsSample
+
+  Created by Alexey Storozhev on 29.03.14.
+  Copyright (c) 2014 e-legion. All rights reserved.
+*/
+
+"LocalizedText1" = "Text1";
+"LocalizedText2" = "Text2";
+
+"AlertBody" = "Message body";
+"Message" = "Messages: %d";
