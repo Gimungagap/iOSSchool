@@ -45,6 +45,53 @@ ELTaskEditionViewControllerDelegate
     [super viewDidLoad];
 
     [self generateData];
+    
+    NSURL *baseUrl = [NSURL URLWithString:@"http://localhost:8000/"];
+    NSURL *url = [NSURL URLWithString:@"/list.json" relativeToURL:baseUrl];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               NSString *string = [[NSString alloc] initWithData:data
+                                                                        encoding:NSUTF8StringEncoding];
+                               
+                               NSError *error = nil;
+                               id object = [NSJSONSerialization JSONObjectWithData:data
+                                                                           options:0
+                                                                             error:&error];
+                               if (error) {
+                                   NSLog(@"error occurred: %@", error);
+                               } else {
+                                   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2),
+                                                  dispatch_get_main_queue(), ^{
+                                                      [self processLoadedTasks:object];
+                                                  });
+                                   
+                               }
+                           }];
+}
+
+- (void)processLoadedTasks:(NSArray *)tasksData
+{
+    NSUInteger oldCount = [self.tasksToDo count];
+
+    NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:[tasksData count]];
+    
+    [tasksData enumerateObjectsUsingBlock:^(NSDictionary *taskData, NSUInteger i, BOOL *stop) {
+        ELTask *task = [ELTask new];
+        task.name = taskData[@"name"];
+        task.taskDescription = taskData[@"description"];
+        
+        [self.tasksToDo addObject:task];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:oldCount+i
+                                                    inSection:0];
+        
+        [indexPaths addObject:indexPath];
+    }];
+    
+    [self.tableView insertRowsAtIndexPaths:indexPaths
+                          withRowAnimation:UITableViewRowAnimationBottom];
 }
 
 
