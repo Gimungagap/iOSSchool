@@ -7,24 +7,21 @@
 //
 
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 
-@class ELTaskEditionDateInputCell;
-
-
-@protocol ELTaskEditionDateInputCellDelegate <NSObject>
-
-@required
-- (void)dateInputCellDidReceiveDate:(ELTaskEditionDateInputCell*)cell;
-
-@end
-
+@protocol ELTaskEditionDateInputCellDelegate;
 
 @interface ELTaskEditionDateInputCell : UITableViewCell
 
-@property (weak, nonatomic) id<ELTaskEditionDateInputCellDelegate>delegate;
-@property (strong, nonatomic) NSString *fieldName;
-@property (strong, nonatomic) NSDate *date;
+@property (nonatomic, weak) id<ELTaskEditionDateInputCellDelegate>delegate;
+@property (nonatomic, copy) NSString *fieldName;
+@property (nonatomic) NSDate *date;
+
+@end
+
+@protocol ELTaskEditionDateInputCellDelegate <NSObject>
+
+- (void)dateInputCellDidReceiveDate:(ELTaskEditionDateInputCell *)cell;
 
 @end

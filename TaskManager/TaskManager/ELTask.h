@@ -7,14 +7,14 @@
 //
 
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 
 @interface ELTask : NSObject
 
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) NSDate *date;
-@property (strong, nonatomic) NSString *taskDescription;
-@property (strong, nonatomic) NSString *imageName;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic) NSDate *date;
+@property (nonatomic, copy) NSString *taskDescription;
+@property (nonatomic, copy) NSString *imageName;
 
 @end

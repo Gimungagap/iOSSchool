@@ -22,26 +22,29 @@
 
 #pragma mark - Public
 
-- (void)setFieldName:(NSString *)fieldName
-{
+- (void)setFieldName:(NSString *)fieldName {
     self.fieldTextLabel.text = fieldName;
-    _fieldName = fieldName;
 }
 
-- (void)setText:(NSString *)text
-{
+- (void)setText:(NSString *)text {
     self.fieldTextField.text = text;
-    _text = text;
 }
 
+- (NSString *)fieldName {
+    return self.fieldTextLabel.text;
+}
+
+- (NSString *)text {
+    return self.fieldTextField.text;
+}
 
 #pragma mark - Text Field
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     self.text = textField.text;
     [self.delegate textInputCellDidReceiveText:self];
     [textField resignFirstResponder];
+
     return NO;
 }
 

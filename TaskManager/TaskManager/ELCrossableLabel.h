@@ -7,11 +7,11 @@
 //
 
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 
 @interface ELCrossableLabel : UILabel
 
-@property (assign, nonatomic, getter = isCrossed) BOOL crossed;
+@property (nonatomic, getter=isCrossed) BOOL crossed;
 
 @end

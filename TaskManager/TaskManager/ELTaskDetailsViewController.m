@@ -25,60 +25,40 @@
 @implementation ELTaskDetailsViewController
 
 
-#pragma mark - Life Cycle
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
-    static NSDateFormatter *dateFormatter;
-    if (!dateFormatter) {
-        dateFormatter = [NSDateFormatter new];
-    }
-
     self.taskImageView.image = [UIImage imageNamed:self.task.imageName];
     self.taskNameLabel.text = self.task.name;
-    
-//    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:@"ru_RU"];
-    [dateFormatter setLocale:locale];
-    
-    NSString *dateString = [dateFormatter stringFromDate:self.task.date];
-    
-    NSDate *date = [dateFormatter dateFromString:dateString];
-    NSLog(@"date: %@", date);
-    
-    self.taskDateLabel.text = dateString;
+    self.taskDateLabel.text = [[self dateFormatter] stringFromDate:self.task.date];
     self.taskDescriptionLabel.text = self.task.taskDescription;
 }
 
-
 #pragma mark - Touches
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self performSegueWithIdentifier:@"photo" sender:nil];
+- (NSDateFormatter *)dateFormatter {
+    static NSDateFormatter *dateFormatter;
+
+    static dispatch_once_t token;
+    dispatch_once(&token, ^{
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+        [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"ru_RU"]];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"MSK"]];
+    });
+
+    return dateFormatter;
 }
 
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"photo"]) {
-        ELTaskImageViewController *dest = (id)segue.destinationViewController;
+        ELTaskImageViewController *dest = segue.destinationViewController;
         dest.imageName = self.task.imageName;
     }
 }
-
-//- (void)viewDidLayoutSubviews
-//{
-//    [super viewDidLayoutSubviews];
-//    
-//    UITableView *tableView = [self.view.subviews firstObject];
-//    tableView.frame = self.view.bounds;
-//}
 
 @end

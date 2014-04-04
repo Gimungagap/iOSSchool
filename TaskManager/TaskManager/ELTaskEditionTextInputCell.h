@@ -7,24 +7,22 @@
 //
 
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 
-@class ELTaskEditionTextInputCell;
-
-
-@protocol ELTaskEditionTextInputCellDelegate <NSObject>
-
-@required
-- (void)textInputCellDidReceiveText:(ELTaskEditionTextInputCell*)cell;
-
-@end
-
+@protocol ELTaskEditionTextInputCellDelegate;
 
 @interface ELTaskEditionTextInputCell : UITableViewCell
 
-@property (weak, nonatomic) id<ELTaskEditionTextInputCellDelegate>delegate;
-@property (strong, nonatomic) NSString *fieldName;
-@property (strong, nonatomic) NSString *text;
+@property (nonatomic, copy) NSString *fieldName;
+@property (nonatomic, copy) NSString *text;
+
+@property (nonatomic, weak) id<ELTaskEditionTextInputCellDelegate> delegate;
+
+@end
+
+@protocol ELTaskEditionTextInputCellDelegate <NSObject>
+
+- (void)textInputCellDidReceiveText:(ELTaskEditionTextInputCell *)cell;
 
 @end

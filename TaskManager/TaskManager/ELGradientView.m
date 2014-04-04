@@ -13,19 +13,16 @@
 
 @implementation ELGradientView
 
-+ (Class)layerClass
-{
++ (Class)layerClass {
     return [CAGradientLayer class];
 }
 
-- (void)awakeFromNib
-{
+- (void)awakeFromNib {
     [super awakeFromNib];
     
-    CAGradientLayer *layer = (id)self.layer;
-    layer.colors = @[(id)[UIColor whiteColor].CGColor,
-                     (id)[UIColor greenColor].CGColor];
-    layer.startPoint = CGPointMake(0.0f, 0.0f);
+    CAGradientLayer *layer = (CAGradientLayer *) self.layer;
+    layer.colors = @[ (__bridge id)[UIColor whiteColor].CGColor, (__bridge id)[UIColor greenColor].CGColor ];
+    layer.startPoint = CGPointZero;
     layer.endPoint = CGPointMake(1.0f, 1.0f);
 }
 

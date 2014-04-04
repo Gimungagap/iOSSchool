@@ -12,14 +12,12 @@
 
 @interface ELNavigationController ()
 
-
 @end
 
 
 @implementation ELNavigationController
 
-- (BOOL)shouldAutorotate
-{
+- (BOOL)shouldAutorotate {
     if (self.topViewController && [self.topViewController respondsToSelector:@selector(shouldAutorotate)]) {
         return [self.topViewController shouldAutorotate];
     } else {
@@ -27,8 +25,7 @@
     }
 }
 
-- (NSUInteger)supportedInterfaceOrientations
-{
+- (NSUInteger)supportedInterfaceOrientations {
     if (self.topViewController && [self.topViewController respondsToSelector:@selector(supportedInterfaceOrientations)]) {
         return [self.topViewController supportedInterfaceOrientations];
     } else {

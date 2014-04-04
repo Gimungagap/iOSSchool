@@ -14,240 +14,180 @@
 #import "ELTaskListViewController.h"
 
 
-typedef NS_ENUM(NSUInteger, ELTaskListSection)
-{
-    ELTaskListSectionToDo = 0,
-    ELTaskListSectionDone,
-    ELTaskListSectionCount
-};
-
-
-@interface ELTaskListViewController ()
-<
-UITableViewDelegate,
-UITableViewDataSource,
-ELTaskEditionViewControllerDelegate
+@interface ELTaskListViewController () <
+    UITableViewDelegate,
+    UITableViewDataSource,
+    ELTaskEditionViewControllerDelegate
 >
 
-@property (strong, nonatomic) NSMutableArray *tasksToDo;
-@property (strong, nonatomic) NSMutableArray *tasksDone;
+@property (nonatomic) NSMutableArray *tasksToDo;
+@property (nonatomic) NSMutableArray *tasksDone;
 
 @end
 
 
 @implementation ELTaskListViewController
 
+enum : NSUInteger {
+    kSectionToDo = 0,
+    kSectionDone,
+    kSectionCount
+};
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     [self generateData];
-    
-    NSURL *baseUrl = [NSURL URLWithString:@"http://localhost:8000/"];
-    NSURL *url = [NSURL URLWithString:@"/list.json" relativeToURL:baseUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               NSString *string = [[NSString alloc] initWithData:data
-                                                                        encoding:NSUTF8StringEncoding];
-                               
-                               NSError *error = nil;
-                               id object = [NSJSONSerialization JSONObjectWithData:data
-                                                                           options:0
-                                                                             error:&error];
-                               if (error) {
-                                   NSLog(@"error occurred: %@", error);
-                               } else {
-                                   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2),
-                                                  dispatch_get_main_queue(), ^{
-                                                      [self processLoadedTasks:object];
-                                                  });
-                                   
-                               }
-                           }];
 }
-
-- (void)processLoadedTasks:(NSArray *)tasksData
-{
-    NSUInteger oldCount = [self.tasksToDo count];
-
-    NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:[tasksData count]];
-    
-    [tasksData enumerateObjectsUsingBlock:^(NSDictionary *taskData, NSUInteger i, BOOL *stop) {
-        ELTask *task = [ELTask new];
-        task.name = taskData[@"name"];
-        task.taskDescription = taskData[@"description"];
-        
-        [self.tasksToDo addObject:task];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:oldCount+i
-                                                    inSection:0];
-        
-        [indexPaths addObject:indexPath];
-    }];
-    
-    [self.tableView insertRowsAtIndexPaths:indexPaths
-                          withRowAnimation:UITableViewRowAnimationBottom];
-}
-
 
 #pragma mark - UI Events
 
-- (IBAction)onTableSwiped:(UISwipeGestureRecognizer*)sender
-{
+- (IBAction)onTableSwiped:(UISwipeGestureRecognizer *)sender {
     CGPoint location = [sender locationInView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
     
-    if (sender.direction == UISwipeGestureRecognizerDirectionLeft &&
-        indexPath.section == ELTaskListSectionDone) {
+    if (sender.direction == UISwipeGestureRecognizerDirectionLeft && indexPath.section == kSectionDone) {
         [self toggleStateForIndexPath:indexPath];
-    } else if (sender.direction == UISwipeGestureRecognizerDirectionRight &&
-               indexPath.section == ELTaskListSectionToDo) {
+    } else if (sender.direction == UISwipeGestureRecognizerDirectionRight && indexPath.section == kSectionToDo) {
         [self toggleStateForIndexPath:indexPath];
     }
 }
 
-
-
 #pragma mark - Logics
 
-- (void)generateData
-{
-    ELTask *task1 = [ELTask new];
+- (void)generateData {
+    ELTask *task1 = [[ELTask alloc] init];
     task1.name = @"Task1";
     task1.date = [NSDate date];
     task1.taskDescription = @"Comment1";
     task1.imageName = @"av1";
     
-    ELTask *task2 = [ELTask new];
+    ELTask *task2 = [[ELTask alloc] init];
     task2.name = @"Task2";
     task2.date = [NSDate date];
     task2.taskDescription = @"Comment2";
     task2.imageName = @"av2";
     
-//    self.tasksToDo = [@[task1, task2] mutableCopy];
-//    self.tasksDone = [NSMutableArray array];
-    self.tasksDone = [@[task1, task2] mutableCopy];
+    self.tasksDone = [NSMutableArray arrayWithArray:@[ task1, task2 ]];
     self.tasksToDo = [NSMutableArray array];
-    
 }
 
 
 #pragma mark - Table View
 
-- (ELTask*)taskAtIndexPath:(NSIndexPath*)indexPath
-{
-    if (indexPath.section == ELTaskListSectionToDo) {
-        return self.tasksToDo[indexPath.row];
-    } else if (indexPath.section == ELTaskListSectionDone) {
-        return self.tasksDone[indexPath.row];
-    } else {
-        return nil;
+- (ELTask *)taskAtIndexPath:(NSIndexPath*)indexPath {
+    NSUInteger index = (NSUInteger) indexPath.row;
+
+    ELTask *result;
+    switch (indexPath.section) {
+        case kSectionToDo:
+            result = self.tasksToDo[index];
+            break;
+        case kSectionDone:
+            result = self.tasksDone[index];
+            break;
+        default:
+            NSAssert(NO, @"Unknown type of section: %d", indexPath.section);
     }
+
+    return result;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return ELTaskListSectionCount;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return kSectionCount;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section == ELTaskListSectionToDo) {
-        return [self.tasksToDo count];
-    } else if (section == ELTaskListSectionDone) {
-        return [self.tasksDone count];
-    } else {
-        return 0;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSInteger result = 0;
+
+    switch (section) {
+        case kSectionToDo:
+            result = [self.tasksToDo count];
+            break;
+        case kSectionDone:
+            result = [self.tasksDone count];
+            break;
+        default:
+            NSAssert(NO, @"Unknown type of section: %d", section);
     }
+
+    return result;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"taskCell"];
     
     ELTask *task = [self taskAtIndexPath:indexPath];
 
-    ELCrossableLabel *label = (id)[cell viewWithTag:17];
-    label.crossed = indexPath.section == ELTaskListSectionDone;
+    ELCrossableLabel *label = (ELCrossableLabel *)[cell viewWithTag:17];
+    label.crossed = indexPath.section == kSectionDone;
     label.text = task.name;
-    
-//    cell.textLabel.text = task.name;
-//    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", task.date];
-//    cell.imageView.image = [UIImage imageNamed:task.imageName];
     
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     ELTask *task = [self taskAtIndexPath:indexPath];
     [self performSegueWithIdentifier:@"taskDetails" sender:task];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == ELTaskListSectionToDo) {
-        return @"ToDo";
-    } else if (section == ELTaskListSectionDone) {
-        return @"Done";
-    } else {
-        return nil;
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *result;
+
+    switch (section) {
+        case kSectionToDo:
+            result = @"To Do";
+            break;
+        case kSectionDone:
+            result = @"Done";
+            break;
+        default:
+            NSAssert(NO, @"Unknown type of section: %d", section);
     }
+
+    return result;
 }
 
-- (void)toggleStateForIndexPath:(NSIndexPath*)indexPath
-{
+- (void)toggleStateForIndexPath:(NSIndexPath *)indexPath {
     ELTask *task = [self taskAtIndexPath:indexPath];
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    ELCrossableLabel *label = (id)[cell viewWithTag:17];
+    ELCrossableLabel *label = (ELCrossableLabel *)[cell viewWithTag:17];
     
     [self.tableView beginUpdates];
     
-    if (indexPath.section == ELTaskListSectionToDo) {
-        [self.tasksToDo removeObject:task];
-        [self.tasksDone addObject:task];
-        [self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:ELTaskListSectionDone]];
-        label.crossed = YES;
-    } else if (indexPath.section == ELTaskListSectionDone) {
-        [self.tasksDone removeObject:task];
-        [self.tasksToDo addObject:task];
-        [self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:ELTaskListSectionToDo]];
-        label.crossed = NO;
+    if (indexPath.section == kSectionToDo) {
+        [self markTask:task done:YES withLabel:label];
+    } else if (indexPath.section == kSectionDone) {
+        [self markTask:task done:NO withLabel:label];
     }
-    
+    [self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionDone]];
+
     [self.tableView endUpdates];
 }
 
-
-#pragma mark - Rotation
-
-- (BOOL)shouldAutorotate
-{
-    return YES;
+- (void)moveTask:(ELTask *)task fromList:(NSMutableArray *)fromList toList:(NSMutableArray *)toList {
+    [fromList removeObject:task];
+    [toList addObject:task];
 }
 
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft;
+- (void)markTask:(ELTask *)task done:(BOOL)done withLabel:(ELCrossableLabel *)label {
+    NSMutableArray *from = done ? self.tasksToDo : self.tasksDone;
+    NSMutableArray *to = done ? self.tasksDone : self.tasksToDo;
+    [self moveTask:task fromList:from toList:to];
+    label.crossed = done;
 }
-
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"taskDetails"]) {
         ELTaskDetailsViewController *target = segue.destinationViewController;
         target.task = sender;
     } else if ([segue.identifier isEqualToString:@"taskEdition"]) {
         UINavigationController *destination = segue.destinationViewController;
-        ELTaskEditionViewController *editionVC =
-                                    (id)destination.topViewController;
+        ELTaskEditionViewController *editionVC = (ELTaskEditionViewController *)destination.topViewController;
         editionVC.delegate = self;
     }
 }
@@ -255,8 +195,7 @@ ELTaskEditionViewControllerDelegate
 
 #pragma mark - Edition
 
-- (void)taskEditionviewController:(ELTaskEditionViewController *)taskEditionViewController didCreateTask:(ELTask *)task
-{
+- (void)taskEditionViewController:(ELTaskEditionViewController *)taskEditionViewController didCreateTask:(ELTask *)task {
     [self.tasksToDo addObject:task];
     [self.tableView reloadData];
     [self dismissViewControllerAnimated:YES completion:nil];
