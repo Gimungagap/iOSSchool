@@ -22,7 +22,6 @@
 		3754DBE618E202EE0096CC0D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3754DBE418E202EE0096CC0D /* InfoPlist.strings */; };
 		3754DBE818E202EE0096CC0D /* TaskManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBE718E202EE0096CC0D /* TaskManagerTests.m */; };
 		3754DBF618E203C50096CC0D /* ELTaskEditionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBF518E203C50096CC0D /* ELTaskEditionViewController.m */; };
-		3754DBFA18E203FB0096CC0D /* ELTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBF918E203FB0096CC0D /* ELTask.m */; };
 		3754DBFD18E2060A0096CC0D /* ELTaskDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFC18E2060A0096CC0D /* ELTaskDetailsViewController.m */; };
 		3754DC0018E2063C0096CC0D /* ELTaskImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DBFF18E2063C0096CC0D /* ELTaskImageViewController.m */; };
 		3754DC0618E32C6A0096CC0D /* ELNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3754DC0518E32C6A0096CC0D /* ELNavigationController.m */; };
@@ -31,6 +30,10 @@
 		379CF06218E338F800319D9A /* ELTaskEditionTextInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF06118E338F800319D9A /* ELTaskEditionTextInputCell.m */; };
 		379CF06518E3391200319D9A /* ELTaskEditionDateInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */; };
 		379CF07318E6D76300319D9A /* ELCrossableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 379CF07218E6D76300319D9A /* ELCrossableLabel.m */; };
+		F141335318F01C42006BBFF3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F141335118F01C42006BBFF3 /* Model.xcdatamodeld */; };
+		F141335618F02040006BBFF3 /* ELPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F141335518F02040006BBFF3 /* ELPerson.m */; };
+		F141335918F02040006BBFF3 /* ELTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F141335818F02040006BBFF3 /* ELTask.m */; };
+		F141335C18F02173006BBFF3 /* ELContextProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F141335B18F02173006BBFF3 /* ELContextProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,8 +68,6 @@
 		3754DBE718E202EE0096CC0D /* TaskManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TaskManagerTests.m; sourceTree = "<group>"; };
 		3754DBF418E203C50096CC0D /* ELTaskEditionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskEditionViewController.h; sourceTree = "<group>"; };
 		3754DBF518E203C50096CC0D /* ELTaskEditionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskEditionViewController.m; sourceTree = "<group>"; };
-		3754DBF818E203FB0096CC0D /* ELTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTask.h; sourceTree = "<group>"; };
-		3754DBF918E203FB0096CC0D /* ELTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTask.m; sourceTree = "<group>"; };
 		3754DBFB18E2060A0096CC0D /* ELTaskDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskDetailsViewController.h; sourceTree = "<group>"; };
 		3754DBFC18E2060A0096CC0D /* ELTaskDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskDetailsViewController.m; sourceTree = "<group>"; };
 		3754DBFE18E2063C0096CC0D /* ELTaskImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTaskImageViewController.h; sourceTree = "<group>"; };
@@ -82,6 +83,14 @@
 		379CF06418E3391200319D9A /* ELTaskEditionDateInputCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTaskEditionDateInputCell.m; sourceTree = "<group>"; };
 		379CF07118E6D76300319D9A /* ELCrossableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCrossableLabel.h; sourceTree = "<group>"; };
 		379CF07218E6D76300319D9A /* ELCrossableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCrossableLabel.m; sourceTree = "<group>"; };
+		F141335218F01C42006BBFF3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		F141335418F02040006BBFF3 /* ELPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELPerson.h; sourceTree = "<group>"; };
+		F141335518F02040006BBFF3 /* ELPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELPerson.m; sourceTree = "<group>"; };
+		F141335718F02040006BBFF3 /* ELTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELTask.h; sourceTree = "<group>"; };
+		F141335818F02040006BBFF3 /* ELTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELTask.m; sourceTree = "<group>"; };
+		F141335A18F02173006BBFF3 /* ELContextProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELContextProvider.h; sourceTree = "<group>"; };
+		F141335B18F02173006BBFF3 /* ELContextProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELContextProvider.m; sourceTree = "<group>"; };
+		F141335F18F03BEC006BBFF3 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,8 +236,13 @@
 		3754DBF718E203DC0096CC0D /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				3754DBF818E203FB0096CC0D /* ELTask.h */,
-				3754DBF918E203FB0096CC0D /* ELTask.m */,
+				F141335718F02040006BBFF3 /* ELTask.h */,
+				F141335A18F02173006BBFF3 /* ELContextProvider.h */,
+				F141335B18F02173006BBFF3 /* ELContextProvider.m */,
+				F141335818F02040006BBFF3 /* ELTask.m */,
+				F141335418F02040006BBFF3 /* ELPerson.h */,
+				F141335518F02040006BBFF3 /* ELPerson.m */,
+				F141335118F01C42006BBFF3 /* Model.xcdatamodeld */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -335,13 +349,16 @@
 				379CF06218E338F800319D9A /* ELTaskEditionTextInputCell.m in Sources */,
 				3754DBD318E202EE0096CC0D /* ELTaskListViewController.m in Sources */,
 				3754DBC918E202EE0096CC0D /* main.m in Sources */,
-				3754DBFA18E203FB0096CC0D /* ELTask.m in Sources */,
+				F141335618F02040006BBFF3 /* ELPerson.m in Sources */,
 				3754DC0018E2063C0096CC0D /* ELTaskImageViewController.m in Sources */,
 				3754DBCD18E202EE0096CC0D /* ELAppDelegate.m in Sources */,
+				F141335918F02040006BBFF3 /* ELTask.m in Sources */,
 				379CF06518E3391200319D9A /* ELTaskEditionDateInputCell.m in Sources */,
 				3754DBF618E203C50096CC0D /* ELTaskEditionViewController.m in Sources */,
 				3788A7A218E6DDC2003ACC0D /* ELGradientView.m in Sources */,
 				3754DBFD18E2060A0096CC0D /* ELTaskDetailsViewController.m in Sources */,
+				F141335C18F02173006BBFF3 /* ELContextProvider.m in Sources */,
+				F141335318F01C42006BBFF3 /* Model.xcdatamodeld in Sources */,
 				379CF07318E6D76300319D9A /* ELCrossableLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -559,6 +576,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F141335118F01C42006BBFF3 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F141335F18F03BEC006BBFF3 /* Model 2.xcdatamodel */,
+				F141335218F01C42006BBFF3 /* Model.xcdatamodel */,
+			);
+			currentVersion = F141335F18F03BEC006BBFF3 /* Model 2.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3754DBB118E202ED0096CC0D /* Project object */;
 }

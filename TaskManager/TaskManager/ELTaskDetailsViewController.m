@@ -28,7 +28,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.taskImageView.image = [UIImage imageNamed:self.task.imageName];
     self.taskNameLabel.text = self.task.name;
     self.taskDateLabel.text = [[self dateFormatter] stringFromDate:self.task.date];
     self.taskDescriptionLabel.text = self.task.taskDescription;
@@ -57,7 +56,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"photo"]) {
         ELTaskImageViewController *dest = segue.destinationViewController;
-        dest.imageName = self.task.imageName;
     }
 }
 
