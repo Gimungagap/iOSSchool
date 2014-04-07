@@ -2,3 +2,4 @@
 *.xccheckout
 *.DS_Store
 *xcuserdata*
+TaskManager/.idea

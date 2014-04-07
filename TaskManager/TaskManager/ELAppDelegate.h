@@ -7,11 +7,11 @@
 //
 
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 
 @interface ELAppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic) UIWindow *window;
 
 @end

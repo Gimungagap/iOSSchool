@@ -2,19 +2,25 @@
 //  ELTask.h
 //  TaskManager
 //
-//  Created by Sergey Rakov on 25.03.14.
+//  Created by Dmitry Zakharov on 4/5/14.
 //  Copyright (c) 2014 Org. All rights reserved.
 //
 
+@import Foundation;
+@import CoreData;
 
-#import <Foundation/Foundation.h>
 
+@class ELPerson;
 
-@interface ELTask : NSObject
+@interface ELTask : NSManagedObject
 
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) NSDate *date;
-@property (strong, nonatomic) NSString *taskDescription;
-@property (strong, nonatomic) NSString *imageName;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *taskDescription;
+@property (nonatomic) NSDate *date;
+@property (nonatomic) NSNumber *time;
+@property (nonatomic) BOOL done;
+@property (nonatomic) ELPerson *assignee;
+
+- (void)toggleState;
 
 @end

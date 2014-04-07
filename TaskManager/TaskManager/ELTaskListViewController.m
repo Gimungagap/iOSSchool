@@ -12,242 +12,187 @@
 #import "ELTaskDetailsViewController.h"
 #import "ELTaskEditionViewController.h"
 #import "ELTaskListViewController.h"
+#import "ELContextProvider.h"
 
 
-typedef NS_ENUM(NSUInteger, ELTaskListSection)
-{
-    ELTaskListSectionToDo = 0,
-    ELTaskListSectionDone,
-    ELTaskListSectionCount
-};
-
-
-@interface ELTaskListViewController ()
-<
-UITableViewDelegate,
-UITableViewDataSource,
-ELTaskEditionViewControllerDelegate
+@interface ELTaskListViewController () <
+    UITableViewDelegate,
+    UITableViewDataSource,
+    ELTaskEditionViewControllerDelegate,
+    NSFetchedResultsControllerDelegate,
+UISearchDisplayDelegate
 >
 
-@property (strong, nonatomic) NSMutableArray *tasksToDo;
-@property (strong, nonatomic) NSMutableArray *tasksDone;
+@property (nonatomic) NSFetchedResultsController *frc;
 
 @end
 
 
 @implementation ELTaskListViewController
 
+enum : NSUInteger {
+    kSectionToDo = 0,
+    kSectionDone,
+    kSectionCount
+};
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-
-    [self generateData];
     
-    NSURL *baseUrl = [NSURL URLWithString:@"http://localhost:8000/"];
-    NSURL *url = [NSURL URLWithString:@"/list.json" relativeToURL:baseUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               NSString *string = [[NSString alloc] initWithData:data
-                                                                        encoding:NSUTF8StringEncoding];
-                               
-                               NSError *error = nil;
-                               id object = [NSJSONSerialization JSONObjectWithData:data
-                                                                           options:0
-                                                                             error:&error];
-                               if (error) {
-                                   NSLog(@"error occurred: %@", error);
-                               } else {
-                                   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2),
-                                                  dispatch_get_main_queue(), ^{
-                                                      [self processLoadedTasks:object];
-                                                  });
-                                   
-                               }
-                           }];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([ELTask class])];
+    [fetchRequest setSortDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"done" ascending:YES],  [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ]];
+
+    NSManagedObjectContext *context = [[ELContextProvider sharedInstance] context];
+    
+    self.frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:@"done" cacheName:nil];
+    self.frc.delegate = self;
+    if (![self.frc performFetch:NULL]) {
+        NSLog(@"Error loading data");
+    }
+    
+    NSLog(@"%@", [[self.frc.fetchedObjects firstObject] objectID]);
 }
-
-- (void)processLoadedTasks:(NSArray *)tasksData
-{
-    NSUInteger oldCount = [self.tasksToDo count];
-
-    NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:[tasksData count]];
-    
-    [tasksData enumerateObjectsUsingBlock:^(NSDictionary *taskData, NSUInteger i, BOOL *stop) {
-        ELTask *task = [ELTask new];
-        task.name = taskData[@"name"];
-        task.taskDescription = taskData[@"description"];
-        
-        [self.tasksToDo addObject:task];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:oldCount+i
-                                                    inSection:0];
-        
-        [indexPaths addObject:indexPath];
-    }];
-    
-    [self.tableView insertRowsAtIndexPaths:indexPaths
-                          withRowAnimation:UITableViewRowAnimationBottom];
-}
-
 
 #pragma mark - UI Events
 
-- (IBAction)onTableSwiped:(UISwipeGestureRecognizer*)sender
-{
+- (IBAction)onTableSwiped:(UISwipeGestureRecognizer *)sender {
     CGPoint location = [sender locationInView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
     
-    if (sender.direction == UISwipeGestureRecognizerDirectionLeft &&
-        indexPath.section == ELTaskListSectionDone) {
+    if (sender.direction == UISwipeGestureRecognizerDirectionLeft && indexPath.section == kSectionDone) {
         [self toggleStateForIndexPath:indexPath];
-    } else if (sender.direction == UISwipeGestureRecognizerDirectionRight &&
-               indexPath.section == ELTaskListSectionToDo) {
+    } else if (sender.direction == UISwipeGestureRecognizerDirectionRight && indexPath.section == kSectionToDo) {
         [self toggleStateForIndexPath:indexPath];
     }
 }
 
-
-
 #pragma mark - Logics
 
-- (void)generateData
-{
-    ELTask *task1 = [ELTask new];
-    task1.name = @"Task1";
-    task1.date = [NSDate date];
-    task1.taskDescription = @"Comment1";
-    task1.imageName = @"av1";
+- (void)generateData {
+    NSManagedObjectContext *context = [[ELContextProvider sharedInstance] context];
     
-    ELTask *task2 = [ELTask new];
-    task2.name = @"Task2";
-    task2.date = [NSDate date];
-    task2.taskDescription = @"Comment2";
-    task2.imageName = @"av2";
+    ELTask *task1 = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ELTask class]) inManagedObjectContext:context];
+    task1.name = @"Kill Alexei for those restrictions (once)";
+    task1.taskDescription = @"Comment 1";
     
-//    self.tasksToDo = [@[task1, task2] mutableCopy];
-//    self.tasksDone = [NSMutableArray array];
-    self.tasksDone = [@[task1, task2] mutableCopy];
-    self.tasksToDo = [NSMutableArray array];
+    ELTask *task2 = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ELTask class]) inManagedObjectContext:context];
+
+    task2.name = @"Kill Alexei for those restrictions (twice, to death)";
+    task2.taskDescription = @"Comment 2";
     
+    NSError *error;
+    if (![context save:&error]) {
+        NSLog(@"Error saving context: %@", error);
+    }
 }
 
 
 #pragma mark - Table View
 
-- (ELTask*)taskAtIndexPath:(NSIndexPath*)indexPath
-{
-    if (indexPath.section == ELTaskListSectionToDo) {
-        return self.tasksToDo[indexPath.row];
-    } else if (indexPath.section == ELTaskListSectionDone) {
-        return self.tasksDone[indexPath.row];
-    } else {
-        return nil;
-    }
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return ELTaskListSectionCount;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section == ELTaskListSectionToDo) {
-        return [self.tasksToDo count];
-    } else if (section == ELTaskListSectionDone) {
-        return [self.tasksDone count];
-    } else {
-        return 0;
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"taskCell"];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    ELTask *task = [self taskAtIndexPath:indexPath];
+//    if (self.searchDisplayController.searchResultsTableView == tableView) {
+//        return 1;
+//    } else {
+        return [[self.frc sections] count];
+    //    }
+}
 
-    ELCrossableLabel *label = (id)[cell viewWithTag:17];
-    label.crossed = indexPath.section == ELTaskListSectionDone;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    if (tableView == self.searchDisplayController.searchResultsTableView) {
+//        return 0;
+//    } else {
+//    
+    return [[self.frc sections][section] numberOfObjects];
+//    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if (tableView == self.searchDisplayController.searchResultsTableView) {
+//        return nil;
+//    } else {
+    UITableViewCell *cell;
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"taskCell"];
+        cell.textLabel.text = [[self.frc objectAtIndexPath:indexPath] name];
+    } else {
+    
+        cell = [tableView dequeueReusableCellWithIdentifier:@"taskCell"];
+    
+    ELTask *task = [self.frc objectAtIndexPath:indexPath];
+
+    ELCrossableLabel *label = (ELCrossableLabel *)[cell viewWithTag:17];
+    label.crossed = indexPath.section == kSectionDone;
     label.text = task.name;
+        NSLog(@"Time: %@", task.time);
+    }
     
-//    cell.textLabel.text = task.name;
-//    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", task.date];
-//    cell.imageView.image = [UIImage imageNamed:task.imageName];
     
     return cell;
+//    }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    ELTask *task = [self taskAtIndexPath:indexPath];
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    
+    [CATransaction setCompletionBlock:^{
+        [self.tableView reloadRowsAtIndexPaths:@[ newIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+    [self.tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    ELTask *task = [self.frc objectAtIndexPath:indexPath];
     [self performSegueWithIdentifier:@"taskDetails" sender:task];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == ELTaskListSectionToDo) {
-        return @"ToDo";
-    } else if (section == ELTaskListSectionDone) {
-        return @"Done";
-    } else {
-        return nil;
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *result = [[self.frc sections][section] name];
+    return [result isEqualToString:@"0"] ? @"Undone" : @"Done";
+}
+
+- (void)toggleStateForIndexPath:(NSIndexPath *)indexPath {
+    ELTask *task = [self.frc objectAtIndexPath:indexPath];
+    [task toggleState];
+    
+    NSLog(@"Done: %@", task.done ? @"YES" : @"NO");
+    
+    NSError *error;
+    if (![self.frc.managedObjectContext save:&error]) {
+        NSLog(@"Error saving data: %@", error);
     }
 }
 
-- (void)toggleStateForIndexPath:(NSIndexPath*)indexPath
-{
-    ELTask *task = [self taskAtIndexPath:indexPath];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    ELCrossableLabel *label = (id)[cell viewWithTag:17];
-    
-    [self.tableView beginUpdates];
-    
-    if (indexPath.section == ELTaskListSectionToDo) {
-        [self.tasksToDo removeObject:task];
-        [self.tasksDone addObject:task];
-        [self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:ELTaskListSectionDone]];
-        label.crossed = YES;
-    } else if (indexPath.section == ELTaskListSectionDone) {
-        [self.tasksDone removeObject:task];
-        [self.tasksToDo addObject:task];
-        [self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:ELTaskListSectionToDo]];
-        label.crossed = NO;
-    }
-    
-    [self.tableView endUpdates];
+- (void)moveTask:(ELTask *)task fromList:(NSMutableArray *)fromList toList:(NSMutableArray *)toList {
+    [fromList removeObject:task];
+    [toList addObject:task];
 }
 
-
-#pragma mark - Rotation
-
-- (BOOL)shouldAutorotate
-{
-    return YES;
+- (void)markTask:(ELTask *)task done:(BOOL)done withLabel:(ELCrossableLabel *)label {
+    label.crossed = done;
 }
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft;
-}
-
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"taskDetails"]) {
         ELTaskDetailsViewController *target = segue.destinationViewController;
         target.task = sender;
     } else if ([segue.identifier isEqualToString:@"taskEdition"]) {
         UINavigationController *destination = segue.destinationViewController;
-        ELTaskEditionViewController *editionVC =
-                                    (id)destination.topViewController;
+        ELTaskEditionViewController *editionVC = (ELTaskEditionViewController *)destination.topViewController;
         editionVC.delegate = self;
     }
 }
@@ -255,11 +200,27 @@ ELTaskEditionViewControllerDelegate
 
 #pragma mark - Edition
 
-- (void)taskEditionviewController:(ELTaskEditionViewController *)taskEditionViewController didCreateTask:(ELTask *)task
-{
-    [self.tasksToDo addObject:task];
-    [self.tableView reloadData];
+- (void)taskEditionViewController:(ELTaskEditionViewController *)taskEditionViewController didCreateTask:(ELTask *)task {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+    NSFetchRequest *request = self.frc.fetchRequest;
+    [request setPredicate:[NSPredicate predicateWithFormat:@"name LIKE %@", searchString]];
+    [request setSortDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES ]]];
+    
+    NSError *error;
+    if (![self.frc performFetch:&error]) {
+        NSLog(@"Error fetching search: %@", error);
+    }
+    
+    [controller.searchResultsTableView reloadData];
+    
+    return YES;
+}
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView {
+    [tableView reloadData];
 }
 
 @end

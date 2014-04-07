@@ -24,14 +24,10 @@
 
 #pragma mark - Life Cycle
 
-- (void)awakeFromNib
-{
+- (void)awakeFromNib {
     [super awakeFromNib];
 
-    UIDatePicker *picker = [UIDatePicker new];
-//    [picker addTarget:self
-//               action:@selector(onDatePicked:)
-//     forControlEvents:UIControlEventValueChanged];
+    UIDatePicker *picker = [[UIDatePicker alloc] init];
     self.fieldTextField.inputView = picker;
     self.datePicker = picker;
     
@@ -45,43 +41,25 @@
 
 #pragma mark - Public
 
-- (void)setFieldName:(NSString *)fieldName
-{
+- (void)setFieldName:(NSString *)fieldName {
     self.fieldTextLabel.text = fieldName;
-    _fieldName = fieldName;
 }
 
-- (void)setDate:(NSDate *)date
-{
-    self.fieldTextField.text = date.description;
+- (NSString *)fieldName {
+    return self.fieldTextLabel.text;
+}
+
+- (void)setDate:(NSDate *)date {
+    self.fieldTextField.text = [date description];
     _date = date;
 }
 
-
 #pragma mark - Date
 
-//- (void)onDatePicked:(UIDatePicker*)picker
-//{
-//    self.date = picker.date;
-//    [self.fieldTextField resignFirstResponder];
-//    [self.delegate dateInputCellDidReceiveDate:self];
-//}
-
-- (void)onDatePicked:(UIButton*)button
-{
+- (void)onDatePicked:(UIButton *)button {
     self.date = self.datePicker.date;
     [self.fieldTextField resignFirstResponder];
     [self.delegate dateInputCellDidReceiveDate:self];
 }
-
-//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
-//{
-//    
-//}
-//
-//- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
-//{
-//    
-//}
 
 @end
